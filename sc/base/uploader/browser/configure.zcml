@@ -1,9 +1,33 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:five="http://namespaces.zope.org/five"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="sc.base.uploader">
     
+    <browser:page
+        name="mass-import"
+        for="collective.quickupload.browser.interfaces.IQuickUploadCapable"
+        class=".import.ImportView"
+        template="templates/import.pt"
+        permission="cmf.AddPortalContent"
+      />
+      
+    <browser:page
+        name="uploader-controlpanel"
+        for="Products.CMFPlone.Portal.PloneSite"
+        class=".controlpanel.ConfigletView"
+        permission="cmf.ManagePortal"
+      />
+
+    <browser:resource 
+        name="multiple-files.png" 
+        file="multiple-files.png"
+        layer=".interfaces.IUploaderLayer"
+      />
+
+    <browser:resource 
+        name="uploader.css" 
+        file="uploader.css"
+        layer=".interfaces.IUploaderLayer"
+      />
+
 </configure>
