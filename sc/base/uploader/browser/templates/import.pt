@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="sc.base.uploader">
+    <body>
+        <div metal:fill-slot="main">
+            <h1 class="documentFirstHeading">
+                <span i18n:translate="">Upload multiple files in </span>
+                <span tal:replace="context/title">Foo Bar</span>            
+            </h1>
+            <a href="" 
+               id="quickupload-form" 
+               tal:attributes="href string:${context/absolute_url}/@@quick_upload"
+               i18n:translate=""> 
+                Multiple file upload.
+            </a>
+            <br />
+            <a href="" id="zipimport-form"  
+               tal:attributes="href string:${context/absolute_url}/@@import_form"
+               i18n:translate=""> 
+                Import a Zip (compressed) file.
+            </a> 
+            <script subtype="text/javascript" charset="utf-8">
+            jQuery(function($){
+                
+                $('#quickupload-form').prepOverlay(
+                    { subtype: 'ajax', 
+                      filter: '', 
+                      formselector: '#myform',
+                      noform: 'close' | 'reload' | 'redirect'
+                    });
+                
+                $('#zipimport-form').prepOverlay(
+                    { subtype: 'ajax', 
+                      filter: '#content>*:not(div.configlet),dl.portalMessage.error,dl.portalMessage.info', 
+                      formselector: '#zc.page.browser_form',
+                      noform: 'close' | 'reload' | 'redirect'
+                    });
+                    
+             });
+            </script>         
+        </div>
+    </body>
+</html>
