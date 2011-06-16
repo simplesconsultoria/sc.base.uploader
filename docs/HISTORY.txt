@@ -4,4 +4,4 @@ Changelog
 0.5 - Unreleased
 ----------------
 
-* Initial release
+* Integrated collective.ziptransport and collective.quickupload [erico_andrei]

@@ -6,7 +6,7 @@ version = open(os.path.join("sc", "base", "uploader", "version.txt")).read().str
 
 setup(name='sc.base.uploader',
       version=version,
-      description="A file upload configuration tool",
+      description="A Plone package providing multiple-files upload",
       long_description=open(os.path.join("sc", "base", "uploader", "README.txt")).read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
@@ -17,9 +17,9 @@ setup(name='sc.base.uploader',
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
-      keywords='',
-      author='',
-      author_email='',
+      keywords='upload massuploader zip plone',
+      author='Simples Consultoria',
+      author_email='products@simplesconsultoria.com.br',
       url='http://svn.plone.org/svn/collective/',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
