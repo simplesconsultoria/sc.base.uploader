@@ -10,7 +10,16 @@
         template="templates/import.pt"
         permission="cmf.AddPortalContent"
       />
-      
+
+    <browser:page
+        name="export-zip"
+        for="collective.quickupload.browser.interfaces.IQuickUploadCapable"
+        class=".export.ExportView"
+        permission="zope2.View"
+      />
+
+    <adapter factory=".controlpanel.ExporterCPAdapter" />
+
     <browser:page
         name="uploader-controlpanel"
         for="Products.CMFPlone.Portal.PloneSite"
