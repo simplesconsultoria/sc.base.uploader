@@ -1,15 +1,6 @@
 <?xml version="1.0"?>
 <object name="portal_controlpanel" xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="sc.base.uploader">
 
- <!-- Hide links to products configlets -->
- <configlet title="Quick Upload" 
-            action_id="QuickUpload" 
-            visible="False" />
- 
- <configlet title="ZipFileTransport"
-            action_id="ZipFileTransport"
-            visible="False" />
- 
  <!-- Show our configlet -->
  <configlet title="Multiple Files Upload"
             action_id="uploader-config"
@@ -22,5 +13,12 @@
             visible="True">
    <permission>Manage portal</permission>
  </configlet>
+ <!-- Hide links to products configlets -->
+ <configlet title="Quick Upload" 
+            action_id="QuickUpload" 
+            visible="False" />
  
+ <configlet title="ZipFileTransport"
+            action_id="ZipFileTransport"
+            visible="False" /> 
 </object>

@@ -3,7 +3,7 @@
  <import-step id="sc.base.uploader-upgrades" version="20100413-01"
               handler="sc.base.uploader.setuphandlers.doUpgrades"
               title="Do upgrades">
-  <dependency step="plone_content" />
+  <dependency step="rolemap" />
   Do upgrades
  </import-step>
 </import-steps>
