@@ -19,7 +19,7 @@ from Products.CMFCore.utils import getToolByName
 from plone.i18n.normalizer.interfaces import IURLNormalizer
 
 from zipfile import ZipFile, ZIP_DEFLATED
-from interfaces import IZipFileTransportUtility
+from collective.zipfiletransport.utilities.interfaces import IZipFileTransportUtility
 
 from collective.zipfiletransport.utilities.utils import ZipFileTransportUtility
 
@@ -83,7 +83,6 @@ def _getAllObjectsData(self, context, objects_listing):
         
         # start point for object path, adding 1 removes the initial '/'
         object_path = self.generateSafeFileName(object_path)
-        
         if object_path:
             # reconstruct path with filename, restores non-ascii
             # characters in filenames
