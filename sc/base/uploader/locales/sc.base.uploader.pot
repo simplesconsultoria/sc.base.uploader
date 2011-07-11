@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-02-27 17:49+0000\n"
+"POT-Creation-Date: 2011-07-11 19:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,5 +12,57 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: sc.base.uploader\n"
+"Domain: DOMAIN\n"
+
+#: ../browser/menu.py:23
+msgid "A form to upload multiple files."
+msgstr ""
+
+#: ../browser/controlpanel.py:67
+msgid "Control settings for multiple file upload."
+msgstr ""
+
+#: ../browser/controlpanel.py:40
+msgid "Enable anonymous export"
+msgstr ""
+
+#: ../browser/controlpanel.py:59
+msgid "Export Settings Form"
+msgstr ""
+
+#: ../browser/templates/import.pt:18
+msgid "Import a Zip (compressed) file."
+msgstr ""
+
+#: ../browser/menu.py:24
+msgid "Multiple Files"
+msgstr ""
+
+#: ../profiles/default/controlpanel.xml
+msgid "Multiple Files Upload"
+msgstr ""
+
+#: ../browser/templates/import.pt:11
+msgid "Multiple file upload."
+msgstr ""
+
+#: ../browser/controlpanel.py:66
+msgid "Multiple files upload"
+msgstr ""
+
+#: ../browser/controlpanel.py:31
+msgid "Quick Upload settings"
+msgstr ""
+
+#: ../browser/controlpanel.py:41
+msgid "Should exporting contents from a folder be enabled for anonymous users?"
+msgstr ""
+
+#: ../browser/templates/import.pt:8
+msgid "Upload multiple files in"
+msgstr ""
+
+#: ../browser/controlpanel.py:35
+msgid "ZipFileTransport Settings Form"
+msgstr ""
 
