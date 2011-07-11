@@ -56,7 +56,6 @@ class ExportView(BrowserView):
         
         #Detect OS
         zipfilename = zipfilename.encode('utf-8')
-
         zip_path = self.zft_util.exportContent(
                                 context=self.context,
                                 obj_paths=obj_paths, 
