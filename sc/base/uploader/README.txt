@@ -7,10 +7,13 @@ sc.base.uploader
 Overview
 --------
 
+Package to configure multiple file upload methods in Plone
+
+
 Requirements
 ------------
 
-    - Plone >=3.2.x (http://plone.org/products/plone)
+    - Plone >=3.3.x (http://plone.org/products/plone)
     
 Installation
 ------------
@@ -24,19 +27,6 @@ To enable this product,on a buildout based installation:
         ...
         eggs = 
             sc.base.uploader
-
-    2. Tell the plone.recipe.zope2instance recipe to install a ZCML slug::
-
-        [instance]
-        ...
-        zcml = 
-            ...
-            sc.base.uploader
-    
-
-If another package depends on the sc.base.uploader egg or 
-includes its zcml directly you do not need to specify anything in the 
-buildout configuration: buildout will detect this automatically.
 
 After updating the configuration you need to run the ''bin/buildout'',
 which will take care of updating your system.
@@ -55,8 +45,11 @@ in order to see the effects of the product installation.
 Sponsoring
 ----------
 
-Development of this product was sponsored by `Simples Consultoria 
-<http://www.simplesconsultoria.com.br/>`_.
+Development of this product was sponsored by:
+     
+     * `Simples Consultoria <http://www.simplesconsultoria.com.br/>`_.
+     
+     * `TV1 <http://www.grupotv1.com.br/>`_.
 
 
 Credits

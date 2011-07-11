@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.5.2 (unreleased)
+0.5.2 (2011-07-11)
 ------------------
 
 * Add a patch to collective.ziptransport to avoid naming issues with Windows 
