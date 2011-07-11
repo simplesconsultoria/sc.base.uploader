@@ -4,7 +4,12 @@ Changelog
 0.5.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+* Add a patch to collective.ziptransport to avoid naming issues with Windows 
+  clients [erico_andrei]
+
+* Pin versions [erico_andrei]
+
+* Change GS order [erico_andrei]
 
 
 0.5.1 (2011-07-11)
