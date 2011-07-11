@@ -1,0 +1,115 @@
+# -*- coding:utf-8 -*-
+from os import close
+from os.path import split, splitext
+from urllib import unquote
+
+from zope.component import queryUtility
+from zope.interface import implements
+try:
+    from zope.site.hooks import getSite
+except ImportError:
+    from zope.app.component.hooks import getSite
+
+from OFS.SimpleItem import SimpleItem
+
+from Products.ATContentTypes import interfaces
+from Products.Archetypes.utils import shasattr
+from Products.CMFCore.utils import getToolByName
+
+from plone.i18n.normalizer.interfaces import IURLNormalizer
+
+from zipfile import ZipFile, ZIP_DEFLATED
+from interfaces import IZipFileTransportUtility
+
+from collective.zipfiletransport.utilities.utils import ZipFileTransportUtility
+
+def _getAllObjectsData(self, context, objects_listing):
+    """ Returns the data in all files with a content object to be placed
+        in a zipfile
+    """
+    import tempfile
+    # Use temporary IO object instead of writing to filesystem.
+    fd, path = tempfile.mkstemp('.zipfiletransport')
+    close(fd)
+    
+    zipFile =  ZipFile(path, 'w', ZIP_DEFLATED)
+    context_path = str(context.virtual_url_path())
+    
+    for obj in objects_listing:
+        object_extension = ''
+        object_path = str(obj.virtual_url_path())
+        
+        if self._objImplementsInterface(obj, interfaces.IATFile) or \
+                    self._objImplementsInterface(obj, interfaces.IATImage):
+            file_data = str(obj.data)
+            object_path = object_path.replace(context_path + '/', '')
+            
+        elif self._objImplementsInterface(obj, interfaces.IATDocument):
+            
+            if "text/html" == obj.Format():
+                file_data = obj.getText()
+                object_extension = ".html"
+            
+            elif "text/x-rst" == obj.Format():
+                file_data = obj.getRawText()
+                object_extension = ".rst"
+            
+            elif "text/structured" == obj.Format():
+                file_data = obj.getRawText()
+                object_extension = ".stx"
+            
+            elif "text/plain" == obj.Format():
+                file_data = obj.getRawText()
+                object_extension = ".txt"
+            
+            else:
+                file_data = obj.getRawText()
+            
+            object_path = object_path.replace(context_path + '/', '')
+        
+        elif self._objImplementsInterface(obj,interfaces.IATFolder):
+            if hasattr(obj, 'getRawText'):
+                file_data = obj.getRawText()
+                
+                if object_path == context_path:
+                    object_path = object_path.split("/")[-1]
+                else:
+                    object_path = object_path.replace(context_path + '/', '')
+                
+                if object_path[-5:] != ".html" and object_path[-4:] != ".htm":
+                    object_extension = ".html"
+        else:
+            continue
+        
+        # start point for object path, adding 1 removes the initial '/'
+        object_path = self.generateSafeFileName(object_path)
+        
+        if object_path:
+            # reconstruct path with filename, restores non-ascii
+            # characters in filenames
+            filename_path = []
+            for i in range(0, len(object_path.split('/'))):
+                filename_path.append(obj.getId())
+                obj = obj.aq_inner.aq_parent
+            
+            if len(filename_path) > 1:
+                filename_path.reverse()
+                filename_path = '/'.join(filename_path)
+            else:
+                filename_path = filename_path[0]
+            
+            # Add the correct file extension
+            if filename_path[-len(object_extension):] != object_extension:
+                filename_path += object_extension
+            
+            if 'Windows' in context.REQUEST['HTTP_USER_AGENT']:
+                filename_path = filename_path.decode('utf-8').encode('cp437')
+            zipFile.writestr(filename_path, file_data)
+        
+    
+    zipFile.close()
+    return path
+
+
+def run():
+    setattr(ZipFileTransportUtility,'_getAllObjectsData',_getAllObjectsData)
