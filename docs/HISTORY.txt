@@ -1,7 +1,16 @@
 Changelog
 =========
 
-0.5 - Unreleased
-----------------
+0.5.1 - Unreleased
+------------------------
+
+* Fix login in generating filename [erico_andrei]
+
+* Brazilian Portuguese translation [erico_andrei]
+
+0.5 - (2011-06-11)
+-------------------
+
+* Added a export view (@@export-zip) [erico_andrei]
 
 * Integrated collective.ziptransport and collective.quickupload [erico_andrei]
