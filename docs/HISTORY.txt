@@ -1,10 +1,10 @@
 Changelog
 =========
 
-0.5.3 (unreleased)
+0.5.3 (2011-08-09)
 ------------------
 
-- Nothing changed yet.
+* Change the way we deal with quickupload [erico_andrei]
 
 
 0.5.2 (2011-07-11)
