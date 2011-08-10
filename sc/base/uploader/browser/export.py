@@ -60,7 +60,13 @@ class ExportView(BrowserView):
                                 context=self.context,
                                 obj_paths=obj_paths, 
                                 filename=filename)
-
+                                
+        self.context.REQUEST.RESPONSE.setHeader(
+                                    'Cache-Control', 
+                                    'max-age=86400, proxy-revalidate, public')
+        self.context.REQUEST.RESPONSE.setHeader(
+                                    'X-Cache-Rule', 
+                                    'zip-exporsct-42')
         self.context.REQUEST.RESPONSE.setHeader(
                                     'content-type', 
                                     'application/zip')

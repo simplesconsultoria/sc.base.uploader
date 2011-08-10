@@ -4,7 +4,7 @@ Changelog
 0.5.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+* Change headers [erico_andrei]
 
 
 0.5.3 (2011-08-09)
