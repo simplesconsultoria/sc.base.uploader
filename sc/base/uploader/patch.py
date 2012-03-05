@@ -43,7 +43,18 @@ def _getAllObjectsData(self, context, objects_listing):
                     self._objImplementsInterface(obj, interfaces.IATImage):
             file_data = str(obj.data)
             object_path = object_path.replace(context_path + '/', '')
-            
+            # Add an extension if we do not have one already
+            if hasattr(obj, 'getContentType'):
+                mime = obj.getContentType()
+                if "image/jpeg" in mime:
+                    object_extension = '.jpg'
+                elif "image/png" in mime:
+                    object_extension = '.png'
+                elif "image/gif" in mime:
+                    object_extension = '.gif'
+                if object_extension in obj.getId():
+                    object_extension = ''
+
         elif self._objImplementsInterface(obj, interfaces.IATDocument):
             
             if "text/html" == obj.Format():
