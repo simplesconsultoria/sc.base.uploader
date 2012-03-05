@@ -1,27 +1,11 @@
 # -*- coding:utf-8 -*-
 from os import close
-from os.path import split, splitext
-from urllib import unquote
-
-from zope.component import queryUtility
-from zope.interface import implements
-try:
-    from zope.site.hooks import getSite
-except ImportError:
-    from zope.app.component.hooks import getSite
-
-from OFS.SimpleItem import SimpleItem
+from zipfile import ZipFile, ZIP_DEFLATED
 
 from Products.ATContentTypes import interfaces
-from Products.Archetypes.utils import shasattr
-from Products.CMFCore.utils import getToolByName
-
-from plone.i18n.normalizer.interfaces import IURLNormalizer
-
-from zipfile import ZipFile, ZIP_DEFLATED
-from collective.zipfiletransport.utilities.interfaces import IZipFileTransportUtility
 
 from collective.zipfiletransport.utilities.utils import ZipFileTransportUtility
+
 
 def _getAllObjectsData(self, context, objects_listing):
     """ Returns the data in all files with a content object to be placed
