@@ -35,6 +35,9 @@ setup(name='sc.base.uploader',
           'collective.zipfiletransport>2.2.2,<2.99',
           'collective.quickupload==1.1.1',
       ],
+      extras_require={
+        'test': ['plone.app.testing'],
+      },
       entry_points="""
       # -*- Entry points: -*-
 
