@@ -24,6 +24,11 @@ class InstallTest(unittest.TestCase):
         qi = getattr(self.portal, 'portal_quickinstaller')
         self.assertTrue(qi.isProductInstalled(PROJECTNAME))
 
+    def test_dependencies_installed(self):
+        qi = getattr(self.portal, 'portal_quickinstaller')
+        self.assertTrue(qi.isProductInstalled('collective.quickupload'))
+        self.assertTrue(qi.isProductInstalled('collective.zipfiletransport'))
+
     def test_cssregistry(self):
         portal_css = self.portal.portal_css
         for css_file in CSS:
