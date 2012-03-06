@@ -5,6 +5,8 @@
 __author__ = """Simples Consultoria <products@simplesconsultoria.com.br>"""
 __docformat__ = 'plaintext'
 
+PROJECTNAME = 'sc.base.uploader'
+
 # PRODUCTS format 
 # (name,locked,hidden,install,profile,runProfile)
 
