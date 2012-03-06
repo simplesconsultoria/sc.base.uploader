@@ -36,5 +36,10 @@
     <utility factory=".quickinstaller.HiddenProducts"
              name="sc.base.uploader" />
     
+    <!-- Overrides the zipfiletransport utility -->
+    <utility component=".utility.zipfiletransport_utility"
+             name="sc_zipfiletransport"
+             provides="collective.zipfiletransport.utilities.interfaces.IZipFileTransportUtility" />
+
     <include package=".upgrades" />
 </configure>
