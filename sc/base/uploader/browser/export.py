@@ -1,24 +1,12 @@
 # -*- coding:utf-8 -*-
 import os
 from zope.component import getUtility
-from zope.component import getMultiAdapter
-from zope.interface import implements
-from zope.i18n import translate
 
-from collective.zipfiletransport.utilities.interfaces import IZipFileTransportUtility
-from collective.zipfiletransport.browser.interfaces import IExport
-
-from AccessControl import Unauthorized
-from Acquisition import aq_parent, aq_inner
-from OFS.interfaces import IOrderedContainer
-from Products.ATContentTypes.interface import IATTopic
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import safe_unicode
-from Products.Five import BrowserView
+from collective.zipfiletransport.utilities.interfaces import (
+                                                IZipFileTransportUtility)
 
 from plone.memoize import view
-
-import urllib
+from Products.Five import BrowserView
 
 
 class ExportView(BrowserView):
