@@ -54,11 +54,11 @@ class ZipFileTransportUtility(object):
             within a ZODB hierarchy.
         """
         self.bad_folders = []
-        zf=ZipFile(file, 'r')
+        zf = ZipFile(file, 'r')
         files = [file.filename for file in zf.filelist]
 
         if len(files) < 1:
-            return ('failure','The zip file was empty')
+            return ('failure', 'The zip file was empty')
 
         for current_file in files:
             # If the current file is a folder move to the next file.
@@ -71,16 +71,19 @@ class ZipFileTransportUtility(object):
                 path_as_list = current_file.split('/')
 
             file_name = self._convertToUnicode(path_as_list[-1])
-            file_name = unicodedata.normalize('NFC', file_name )
+            file_name = unicodedata.normalize('NFC', file_name)
 
-            normalized_file_name = queryUtility(IURLNormalizer).normalize(file_name)
+            normalizer = queryUtility(IURLNormalizer)
+            normalized_file_name = normalizer.normalize(file_name)
 
             # Checks to make sure that the file path does not contain any
             # previouslsy found bad folders.
             if not self._checkFilePath(current_file, path_as_list):
                 continue
 
-            folder = self._createFolderStructure(path_as_list, context, excludefromnav)
+            folder = self._createFolderStructure(path_as_list,
+                                                 context,
+                                                 excludefromnav)
 
             # no folder to add to? Then move on to next object.
             if not folder:
@@ -96,20 +99,17 @@ class ZipFileTransportUtility(object):
                     folder.manage_delObjects([normalized_file_name])
 
                 obj = self._createObject(normalized_file_name, fdata, folder)
-
-                if hasattr(obj,'description') and description:
+                obj.setTitle(file_name)
+                if hasattr(obj, 'description') and description:
                     obj.setDescription(description)
-                if hasattr(obj,'contributors') and contributors:
+                if hasattr(obj, 'contributors') and contributors:
                     obj.setContributors(contributors)
-                if hasattr(obj,'subject') and categories:
+                if hasattr(obj, 'subject') and categories:
                     obj.setSubject(categories)
                 if excludefromnav:
                     obj.setExcludeFromNav(True)
                 obj.reindexObject()
-		obj.setTitle(file_name)
-                obj.reindexObject()
         zf.close()
-
 
     def _checkFilePath(self, current_file, path_as_list):
         """ Make sure file isn't in a bad folder, if it is skip to the next
@@ -120,7 +120,6 @@ class ZipFileTransportUtility(object):
                 return False
         return True
 
-
     def _createFolderStructure(self, path_as_list, parent, excludefromnav):
         """ Creates the folder structure given a path_part and parent object
         """
@@ -130,15 +129,15 @@ class ZipFileTransportUtility(object):
         factory = getToolByName(parent, 'portal_factory')
 
         file_name = self._convertToUnicode(path_as_list[-1])
-        file_name = unicodedata.normalize('NFC', file_name )
+        file_name = unicodedata.normalize('NFC', file_name)
 
         # Create the folder structure
-        for i in range( len(path_as_list) - 1 ):
+        for i in range(len(path_as_list) - 1):
             path_part = self._convertToUnicode(path_as_list[i])
             path_part = unicodedata.normalize('NFC', path_part)
             normalized_path_part = \
                 queryUtility(IURLNormalizer).normalize(path_part)
-            current_path = '/'.join(path_as_list[:i+1])
+            current_path = '/'.join(path_as_list[:i + 1])
 
             # If in the current folder, then just get the folder
             if normalized_path_part not in parent.objectIds():
@@ -147,7 +146,8 @@ class ZipFileTransportUtility(object):
                     self.bad_folders.append(current_path)
                     return None
 
-                parent.invokeFactory(type_name=folder_type, id=normalized_path_part)
+                parent.invokeFactory(type_name=folder_type,
+                                     id=normalized_path_part)
                 foldr = getattr(parent, normalized_path_part)
                 foldr.setTitle(path_part)
                 if excludefromnav:
@@ -161,14 +161,13 @@ class ZipFileTransportUtility(object):
             parent = foldr
         return parent
 
-
     def _createObject(self, filepath, fdata, parent):
         """ """
         props = getToolByName(parent, 'portal_properties')
         image_type = props.zipfile_properties.image_type
         file_type = props.zipfile_properties.file_type
         doc_type = props.zipfile_properties.doc_type
-        folder_type = props.zipfile_properties.folder_type
+        #folder_type = props.zipfile_properties.folder_type
 
         mt = parent.mimetypes_registry
 
@@ -212,25 +211,26 @@ class ZipFileTransportUtility(object):
         catalog.reindexObject(obj, catalog.indexes())
         return obj
 
-
     def _getFileObjectType(self, major, mimetype):
         """ """
         props = getToolByName(getSite(), 'portal_properties')
         image_type = props.zipfile_properties.image_type
         file_type = props.zipfile_properties.file_type
         doc_type = props.zipfile_properties.doc_type
-        folder_type = props.zipfile_properties.folder_type
+        #folder_type = props.zipfile_properties.folder_type
 
         if 'image' == major:
             type = image_type
-        elif mimetype in ['text/html','text/plain','text/structured','text/x-rst']:
+        elif mimetype in ['text/html',
+                          'text/plain',
+                          'text/structured',
+                          'text/x-rst']:
             type = doc_type
         else:
             type = file_type
         return type
 
-
-    def getTime(self,id):
+    def getTime(self, id):
         """ Returns the gmtime appended to the an id, used to obtain a unique
             id for the logFile object
         """
@@ -240,17 +240,14 @@ class ZipFileTransportUtility(object):
             uid += str(tp)
         return uid
 
-    # Export content to a zip file.
-    #
-    # context   - Container refers to the container of all the objects that
-    #               are to be exported.
-    # obj_paths - Refers to a list of paths of either objects or contexts
-    #               that will be included in the zip file.
-    # filename - Refers to the fullpath filename of the exported zip file.
-
-
     def exportContent(self, context, obj_paths=None, filename=None):
         """ Export content to a zip file.
+            context   - Container refers to the container of all the objects
+                        that are to be exported.
+            obj_paths - Refers to a list of paths of either objects or contexts
+                        that will be included in the zip file.
+            filename - Refers to the fullpath filename of the exported
+                       zip file.
         """
         objects_list = self._createObjectList(context, obj_paths)
         zip_path = self._getAllObjectsData(context, objects_list)
@@ -270,25 +267,30 @@ class ZipFileTransportUtility(object):
         """ Create a list of objects by iteratively descending a folder
             tree... or trees (if obj_paths is set).
         """
-        objects_list=[]
+        objects_list = []
 
         if obj_paths:
             portal = getToolByName(context, 'portal_url').getPortalObject()
+            wt = getToolByName(portal, 'portal_workflow')
             for path in obj_paths:
                 obj = portal.restrictedTraverse(path)
                 # if this is a folder, then add everything in this folder to
                 # the obj_paths list otherwise simply add the object.
                 if obj.isPrincipiaFolderish:
-                    self._appendItemsToList(folder=obj, list=objects_list,state=state)
+                    self._appendItemsToList(folder=obj,
+                                            list=objects_list,
+                                            state=state)
                 elif obj not in objects_list:
                     if state:
-                        if obj.portal_workflow.getInfoFor(obj,'review_state') in state:
+                        if wt.getInfoFor(obj, 'review_state') in state:
                             objects_list.append(obj)
                     else:
                         objects_list.append(obj)
         else:
             #create a list of the objects that are contained by the context
-            self._appendItemsToList(folder=context, list=objects_list,state=state)
+            self._appendItemsToList(folder=context,
+                                    list=objects_list,
+                                    state=state)
 
         return objects_list
 
@@ -364,9 +366,11 @@ class ZipFileTransportUtility(object):
                     if object_path == context_path:
                         object_path = object_path.split("/")[-1]
                     else:
-                        object_path = object_path.replace(context_path + '/', '')
+                        object_path = object_path.replace(context_path + '/',
+                                                          '')
 
-                    if object_path[-5:] != ".html" and object_path[-4:] != ".htm":
+                    if (object_path[-5:] != ".html" and
+                        object_path[-4:] != ".htm"):
                         object_extension = ".html"
             else:
                 continue
@@ -392,7 +396,8 @@ class ZipFileTransportUtility(object):
                     filename_path += object_extension
 
                 if 'Windows' in context.REQUEST['HTTP_USER_AGENT']:
-                    filename_path = filename_path.decode('utf-8').encode('cp437')
+                    filename_path = filename_path.decode('utf-8')
+                    filename_path = filename_path.encode('cp437')
                 zipFile.writestr(filename_path, file_data)
 
         zipFile.close()
@@ -411,11 +416,11 @@ class ZipFileTransportUtility(object):
         if interfaceClass in self._tupleTreeToList(obj.__implements__):
             return True
 
-
     def _tupleTreeToList(self, t, lsa=None):
         """Convert an instance, or tree of tuples, into list."""
         import types
-        if lsa is None: lsa = []
+        if lsa is None:
+            lsa = []
         if isinstance(t, types.TupleType):
             for o in t:
                 self._tupleTreeToList(o, lsa)
@@ -423,25 +428,24 @@ class ZipFileTransportUtility(object):
             lsa.append(t)
         return lsa
 
-
     def _appendItemsToList(self, folder, list, state):
         """ """
-        brains = folder.portal_catalog.searchResults(
-                    path={'query':('/'.join(folder.getPhysicalPath())),}
-                    )
+        ct = getToolByName(folder, 'portal_catalog')
+        wt = getToolByName(folder, 'portal_workflow')
+        path = '/'.join(folder.getPhysicalPath())
+        brains = ct.searchResults(path={'query': path})
 
         for brain_object in brains:
             obj = brain_object.getObject()
 
             if not (obj in list or obj.isPrincipiaFolderish):
                 if state:
-                    if obj.portal_workflow.getInfoFor(obj,'review_state') in state:
+                    if wt.getInfoFor(obj, 'review_state') in state:
                         list.append(obj)
                 else:
                     list.append(obj)
 
         return list
-
 
     def _convertToUnicode(self, bytestring):
         """ Convert bytestring into unicode object
@@ -459,50 +463,47 @@ class ZipFileTransportUtility(object):
     #
     #
     def getZipFilenames(self, zfile):
-         """ Gets a list of filenames in the Zip archive."""
-         try:
-             f = ZipFile(zfile)
-         except error:
-             return []
-         if f:
-             return f.namelist()
-         else:
-             return []
+        """ Gets a list of filenames in the Zip archive."""
+        try:
+            f = ZipFile(zfile)
+        except:
+            #XXX: This is ugly
+            f = None
+        return f and f.namelist() or []
 
     def getZipFileInfo(self, zfile):
-         """ Gets info about the files in a Zip archive.
-         """
-         mt = self.mimetypes_registry
-         f = ZipFile(zfile)
-         fileinfo = []
-         for x in f.infolist():
-             fileinfo.append((x.filename,
-                              mt.lookupExtension(x.filename).normalized(),
-                              x.file_size))
-         return fileinfo
+        """ Gets info about the files in a Zip archive.
+        """
+        mt = self.mimetypes_registry
+        f = ZipFile(zfile)
+        fileinfo = []
+        for x in f.infolist():
+            fileinfo.append((x.filename,
+                             mt.lookupExtension(x.filename).normalized(),
+                             x.file_size))
+        return fileinfo
 
     def getZipFile(self, zfile, filename):
-         """ Gets a file from the Zip archive.
-         """
-         mt = self.mimetypes_registry
-         f = ZipFile(zfile)
-         finfo = f.getinfo(filename)
-         fn = split(finfo.filename)[1] # Get the file name
-         path = fn.replace('\\', '/')
-         fp = path.split('/') # Split the file path into a list
+        """ Gets a file from the Zip archive.
+        """
+        mt = self.mimetypes_registry
+        f = ZipFile(zfile)
+        finfo = f.getinfo(filename)
+        fn = split(finfo.filename)[1]  # Get the file name
+        path = fn.replace('\\', '/')
+        fp = path.split('/')  # Split the file path into a list
 
-         if '' == fn:
-             return 'dir', fn, fp, None, None, 0, None
-         ftype = mt.lookupExtension(finfo.filename)
-         if not ftype:
-             major = 'application'
-             mimetype = 'application/octet-stream'
-         else:
-             major =  ftype.major()
-             mimetype = ftype.normalized()
-         fdata = f.read(filename)
-         return 'file', fn, fp, major, mimetype, finfo.file_size, fdata
-
+        if '' == fn:
+            return 'dir', fn, fp, None, None, 0, None
+        ftype = mt.lookupExtension(finfo.filename)
+        if not ftype:
+            major = 'application'
+            mimetype = 'application/octet-stream'
+        else:
+            major = ftype.major()
+            mimetype = ftype.normalized()
+        fdata = f.read(filename)
+        return 'file', fn, fp, major, mimetype, finfo.file_size, fdata
 
     def get_zipfile_name(self):
         return 'Test.zip'
