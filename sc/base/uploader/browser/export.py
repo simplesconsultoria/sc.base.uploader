@@ -25,11 +25,11 @@ class ExportView(BrowserView):
     """ A browser view to export a folder as a zip file
     """
     def __init__(self, context, request):
-        self.context = context
+        self.context = aq_inner(context)
         self.request = request
         self.zft_util = getUtility(
                             IZipFileTransportUtility, 
-                            name="zipfiletransport")
+                            name="sc_zipfiletransport")
     
     @view.memoize
     def _enable_anonymous(self):
@@ -40,7 +40,6 @@ class ExportView(BrowserView):
         
     def __call__(self,*args,**kwargs):
         ''' Return the zip file, if allowed '''
-        
         # Anonymous enabled only if set globally
         if (self.context.portal_membership.isAnonymousUser() and not self._enable_anonymous()):
             return
