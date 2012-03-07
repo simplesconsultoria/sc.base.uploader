@@ -6,7 +6,11 @@ Changelog
 
 * Force file extension for images [ericof]
 
+* Use our own utility to make sure everything is ok [ericof]
+
 * PEP8 and pyflakes [ericof]
+
+* Add testing [ericof]
 
 
 0.5.4 (2011-08-10)
