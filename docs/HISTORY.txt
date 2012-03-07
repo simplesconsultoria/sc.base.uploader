@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.5.5 (unreleased)
-------------------
+0.6 (2012-03-06)
+----------------
 
 * Force file extension for images [ericof]
 
