@@ -40,8 +40,8 @@ setup(name='sc.base.uploader',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
-          'collective.zipfiletransport>2.2.2,<2.99',
-          'collective.quickupload==1.1.1',
+          'collective.zipfiletransport==3.2.1',
+          'collective.quickupload==1.5.8',
       ],
       extras_require={
           'develop': [
