@@ -2,28 +2,35 @@
 from setuptools import setup, find_packages
 import os
 
-version = open(os.path.join("sc", "base", "uploader",
-                            "version.txt")).read().strip()
+version = '1.0'
+
+long_description = (open("README.txt").read() + "\n" +
+                    open(os.path.join("docs", "INSTALL.txt")).read() + "\n" +
+                    open(os.path.join("docs", "CREDITS.txt")).read() + "\n" +
+                    open(os.path.join("docs", "HISTORY.txt")).read())
+
 
 setup(name='sc.base.uploader',
       version=version,
       description="A Plone package providing multiple-files upload",
-      long_description=open(os.path.join("sc", "base", "uploader",
-                                         "README.txt")).read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from
-      # http://www.python.org/pypi?%3Aaction=list_classifiers
+      long_description=long_description,
       classifiers=[
-        "Framework :: Plone",
-        "Framework :: Zope2",
-        "Framework :: Zope3",
-        "Programming Language :: Python",
-        "Topic :: Software Development :: Libraries :: Python Modules",
-        ],
+          "Development Status :: 3 - Alpha",
+          "Environment :: Web Environment",
+          "Framework :: Plone",
+          "Framework :: Plone :: 4.2",
+          "Intended Audience :: Developers",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 2.7",
+          "Topic :: Internet :: WWW/HTTP",
+          "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+          "Topic :: Software Development :: Libraries :: Python Modules",
+      ],
       keywords='upload massuploader zip plone',
       author='Simples Consultoria',
       author_email='products@simplesconsultoria.com.br',
-      url='https://bitbucket.org/simplesconsultoria/sc.base.uploader',
+      url='https://github.com/simplesconsultoria/sc.base.uploader',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['sc', 'sc.base'],
@@ -36,7 +43,16 @@ setup(name='sc.base.uploader',
           'collective.quickupload==1.1.1',
       ],
       extras_require={
-        'test': ['plone.app.testing'],
+          'develop': [
+              'Sphinx',
+              'manuel',
+              'pep8',
+              'setuptools-flakes',
+          ],
+          'test': [
+              'interlude',
+              'plone.app.testing'
+          ],
       },
       entry_points="""
       # -*- Entry points: -*-
