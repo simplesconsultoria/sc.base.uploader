@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import unittest2 as unittest
-
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
-
+from plone.app.testing import TEST_USER_ID
 from sc.base.uploader.config import PROJECTNAME
 from sc.base.uploader.testing import INTEGRATION_TESTING
 
+import unittest2 as unittest
+
 CSS = [
     "++resource++uploader.css",
-    ]
+]
 
 
 class InstallTest(unittest.TestCase):
@@ -53,7 +52,7 @@ class UninstallTest(unittest.TestCase):
         portal_css = self.portal.portal_css
         for css_file in CSS:
             self.assertFalse(css_file in portal_css.getResourceIds(),
-                            '%s not installed' % css_file)
+                             '%s not installed' % css_file)
 
 
 def test_suite():

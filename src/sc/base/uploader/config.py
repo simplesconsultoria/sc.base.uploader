@@ -7,10 +7,7 @@ __docformat__ = 'plaintext'
 
 PROJECTNAME = 'sc.base.uploader'
 
-# PRODUCTS format 
 # (name,locked,hidden,install,profile,runProfile)
 
-PRODUCTS=[
-          ('collective.quickupload',0,1,1,'collective.quickupload:default',0),
-          ('collective.zipfiletransport',0,1,1,'collective.zipfiletransport:default',1),
-         ]
+PRODUCTS = [('collective.quickupload', 0, 1, 1, 'collective.quickupload:default', 0),
+            ('collective.zipfiletransport', 0, 1, 1, 'collective.zipfiletransport:default', 1)]

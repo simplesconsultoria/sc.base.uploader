@@ -1,14 +1,12 @@
 # -*- coding:utf-8 -*-
-import os
 from Acquisition import aq_inner
+from collective.zipfiletransport.utilities import interfaces as zpinterfaces
+from plone.memoize import view
+from Products.CMFCore.utils import getToolByName
+from Products.Five import BrowserView
 from zope.component import getUtility
 
-from collective.zipfiletransport.utilities.interfaces import (
-                                                IZipFileTransportUtility)
-
-from plone.memoize import view
-from Products.Five import BrowserView
-from Products.CMFCore.utils import getToolByName
+import os
 
 
 class ExportView(BrowserView):
@@ -17,7 +15,7 @@ class ExportView(BrowserView):
     def __init__(self, context, request):
         self.context = aq_inner(context)
         self.request = request
-        self.zft_util = getUtility(IZipFileTransportUtility,
+        self.zft_util = getUtility(zpinterfaces.IZipFileTransportUtility,
                                    name="sc_zipfiletransport")
 
     @view.memoize
@@ -40,31 +38,25 @@ class ExportView(BrowserView):
 
         context = self.context
         filename = '%s.zip' % (context.getId())
-        
+
         zipfilename = self.zft_util.generateSafeFileName(filename)
-        
+
         #Detect OS
         zipfilename = zipfilename.encode('utf-8')
-        zip_path = self.zft_util.exportContent(
-                                context=self.context,
-                                obj_paths=obj_paths,
-                                filename=filename)
-                                
-        self.context.REQUEST.RESPONSE.setHeader(
-                                    'Cache-Control',
-                                    'max-age=86400, proxy-revalidate, public')
-        self.context.REQUEST.RESPONSE.setHeader(
-                                    'X-Cache-Rule',
-                                    'zip-exporsct-42')
-        self.context.REQUEST.RESPONSE.setHeader(
-                                    'content-type',
-                                    'application/zip')
-        self.context.REQUEST.RESPONSE.setHeader(
-                                    'content-length',
-                                    str(os.stat(zip_path)[6]))
-        self.context.REQUEST.RESPONSE.setHeader(
-                                    'Content-Disposition',
-                                    ' attachment; filename=' + zipfilename)
+        zip_path = self.zft_util.exportContent(context=self.context,
+                                               obj_paths=obj_paths,
+                                               filename=filename)
+        response = self.context.REQUEST.RESPONSE
+        response.setHeader('Cache-Control',
+                           'max-age=86400, proxy-revalidate, public')
+        response.setHeader('X-Cache-Rule',
+                           'zip-exporsct-42')
+        response.setHeader('content-type',
+                           'application/zip')
+        response.setHeader('content-length',
+                           str(os.stat(zip_path)[6]))
+        response.setHeader('Content-Disposition',
+                           ' attachment; filename=' + zipfilename)
 
         # iterate over the temporary file object, returning it to the client
         fp = open(zip_path, 'rb')

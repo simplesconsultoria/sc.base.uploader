@@ -1,20 +1,15 @@
 # -*- coding: utf-8 -*-
-import os
-import unittest2 as unittest
-
+from collective.zipfiletransport.utilities import interfaces as zpinterfaces
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+from plone.testing.z2 import Browser
+from sc.base.uploader.testing import FUNCTIONAL_TESTING
+from sc.base.uploader.testing import INTEGRATION_TESTING
 from zope.component import getUtility
 
-from plone.testing.z2 import Browser
-
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
-
-from collective.zipfiletransport.utilities.interfaces import (
-                                                IZipFileTransportUtility)
-
-from sc.base.uploader.testing import INTEGRATION_TESTING
-from sc.base.uploader.testing import FUNCTIONAL_TESTING
+import os
+import unittest2 as unittest
 
 
 class BaseExportTest(unittest.TestCase):
@@ -114,7 +109,7 @@ class FilenamesExportTest(unittest.TestCase):
         # Add a file with no extension
         filename = 'test_image.png'
         image_file = open(os.path.join(os.path.dirname(__file__),
-                              filename))
+                          filename))
         self.folder.invokeFactory('Image', 'image_without_extension')
         image = self.folder[filename]
         image.setImage(image_file.read())
@@ -129,7 +124,7 @@ class FilenamesExportTest(unittest.TestCase):
         self.setUpContent()
 
     def test_export_files(self):
-        zft_util = getUtility(IZipFileTransportUtility,
+        zft_util = getUtility(zpinterfaces.IZipFileTransportUtility,
                               name="sc_zipfiletransport")
         obj_paths = ['/'.join(self.folder.getPhysicalPath())]
         zip_path = zft_util.exportContent(self.folder, obj_paths)
@@ -138,7 +133,7 @@ class FilenamesExportTest(unittest.TestCase):
         self.assertEqual(len(filenames), 2)
 
     def test_export_filenames(self):
-        zft_util = getUtility(IZipFileTransportUtility,
+        zft_util = getUtility(zpinterfaces.IZipFileTransportUtility,
                               name="sc_zipfiletransport")
         obj_paths = ['/'.join(self.folder.getPhysicalPath())]
         zip_path = zft_util.exportContent(self.folder, obj_paths)
@@ -149,7 +144,7 @@ class FilenamesExportTest(unittest.TestCase):
 
     def test_export_filenames_with_no_extension(self):
         self.setUpImagesWithNoExtension()
-        zft_util = getUtility(IZipFileTransportUtility,
+        zft_util = getUtility(zpinterfaces.IZipFileTransportUtility,
                               name="sc_zipfiletransport")
         obj_paths = ['/'.join(self.folder.getPhysicalPath())]
         zip_path = zft_util.exportContent(self.folder, obj_paths)

@@ -1,10 +1,8 @@
 # -*- coding:utf-8 -*-
-from os import close
-from zipfile import ZipFile, ZIP_DEFLATED
-
-from Products.ATContentTypes import interfaces
-
 from collective.zipfiletransport.utilities.utils import ZipFileTransportUtility
+from os import close
+from Products.ATContentTypes import interfaces
+from zipfile import ZipFile, ZIP_DEFLATED
 
 
 def _getAllObjectsData(self, context, objects_listing):
@@ -22,9 +20,9 @@ def _getAllObjectsData(self, context, objects_listing):
     for obj in objects_listing:
         object_extension = ''
         object_path = str(obj.virtual_url_path())
-
-        if self._objImplementsInterface(obj, interfaces.IATFile) or \
-                    self._objImplementsInterface(obj, interfaces.IATImage):
+        is_image = self._objImplementsInterface(obj, interfaces.IATImage)
+        is_file = self._objImplementsInterface(obj, interfaces.IATFile)
+        if (is_image or is_file):
             file_data = str(obj.data)
             object_path = object_path.replace(context_path + '/', '')
             # Add an extension if we do not have one already

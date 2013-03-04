@@ -1,34 +1,25 @@
 # -*- coding:utf-8 -*-
-
-import unicodedata
-from os.path import split, splitext
+from collective.zipfiletransport.utilities import interfaces as zpinterfaces
 from os import close
+from os.path import split, splitext
+from plone.i18n.normalizer.interfaces import IURLNormalizer
+from Products.Archetypes.utils import shasattr
+from Products.ATContentTypes import interfaces
+from Products.CMFCore.utils import getToolByName
+from tempfile import TemporaryFile
 from urllib import unquote
-
+from zipfile import ZipFile, ZIP_DEFLATED
 from zope.component import queryUtility
 from zope.interface import implements
-try:
-    from zope.site.hooks import getSite
-except ImportError:
-    from zope.app.component.hooks import getSite
+from zope.site.hooks import getSite
 
-from Products.ATContentTypes import interfaces
-from Products.Archetypes.utils import shasattr
-from Products.CMFCore.utils import getToolByName
-
-from plone.i18n.normalizer.interfaces import IURLNormalizer
-
-from zipfile import ZipFile, ZIP_DEFLATED
-from collective.zipfiletransport.utilities.interfaces import (
-                                    IZipFileTransportUtility)
-
-from tempfile import TemporaryFile
+import unicodedata
 
 
 class ZipFileTransportUtility(object):
     """ ZipFileTransport Utility """
 
-    implements(IZipFileTransportUtility)
+    implements(zpinterfaces.IZipFileTransportUtility)
 
     # Import content to a zip file.
     #
@@ -40,22 +31,20 @@ class ZipFileTransportUtility(object):
     #                   uploaded objects.
     # contributors - Contributors is the contributors message to be attached
     #                   to the uploaded objects.
-    def importContent(
-                    self,
-                    file,
-                    context,
-                    description=None,
-                    contributors=None,
-                    categories=None,
-                    overwrite=False,
-                    excludefromnav=False,
-                    ):
+    def importContent(self,
+                      file,
+                      context,
+                      description=None,
+                      contributors=None,
+                      categories=None,
+                      overwrite=False,
+                      excludefromnav=False):
         """ Import content from a zip file, creating the folder structure
             within a ZODB hierarchy.
         """
         self.bad_folders = []
         zf = ZipFile(file, 'r')
-        files = [file.filename for file in zf.filelist]
+        files = [f.filename for f in zf.filelist]
 
         if len(files) < 1:
             return ('failure', 'The zip file was empty')
@@ -178,10 +167,8 @@ class ZipFileTransportUtility(object):
             mimetype = ftype.normalized()
             newObjType = self._getFileObjectType(ftype.major(), mimetype)
         else:
-            newObjType = self._getFileObjectType(
-                                        'application',
-                                        'application/octet-stream'
-                                        )
+            newObjType = self._getFileObjectType('application',
+                                                 'application/octet-stream')
             mimetype = 'application/octet-stream'
         nm = filepath.split('/')
 
@@ -315,9 +302,9 @@ class ZipFileTransportUtility(object):
         for obj in objects_listing:
             object_extension = ''
             object_path = str(obj.virtual_url_path())
-
-            if self._objImplementsInterface(obj, interfaces.IATFile) or \
-                        self._objImplementsInterface(obj, interfaces.IATImage):
+            is_file = self._objImplementsInterface(obj, interfaces.IATFile)
+            is_image = self._objImplementsInterface(obj, interfaces.IATImage)
+            if (is_file or is_image):
                 file_data = str(obj.data)
                 object_path = object_path.replace(context_path + '/', '')
                 # Add an extension if we do not have one already
@@ -369,8 +356,7 @@ class ZipFileTransportUtility(object):
                         object_path = object_path.replace(context_path + '/',
                                                           '')
 
-                    if (object_path[-5:] != ".html" and
-                        object_path[-4:] != ".htm"):
+                    if (object_path[-4:] != ".htm"):
                         object_extension = ".html"
             else:
                 continue

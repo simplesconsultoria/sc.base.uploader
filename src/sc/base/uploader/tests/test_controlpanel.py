@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-
-import unittest2 as unittest
-
+from plone.app.testing import logout
+from Products.CMFCore.utils import getToolByName
+from sc.base.uploader.testing import INTEGRATION_TESTING
 from zope.component import getMultiAdapter
 
-from plone.app.testing import logout
-
-from Products.CMFCore.utils import getToolByName
-
-from sc.base.uploader.testing import INTEGRATION_TESTING
+import unittest2 as unittest
 
 
 class ControlPanelTest(unittest.TestCase):

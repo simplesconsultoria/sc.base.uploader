@@ -23,9 +23,8 @@ class Fixture(PloneSandboxLayer):
 FIXTURE = Fixture()
 INTEGRATION_TESTING = IntegrationTesting(
     bases=(FIXTURE,),
-    name='sc.base.uploader:Integration',
-    )
+    name='sc.base.uploader:Integration')
+
 FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(FIXTURE,),
-    name='sc.base.uploader:Functional',
-    )
+    name='sc.base.uploader:Functional')
