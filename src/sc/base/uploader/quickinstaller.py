@@ -5,7 +5,7 @@ from Products.CMFPlone import interfaces as plone_interfaces
 
 
 class HiddenProducts(object):
-    implements(qi_interfaces.INonInstallableProducts)
+    implements(qi_interfaces.INonInstallable)
 
     def getNonInstallableProducts(self):
         return [u'collective.quickupload',
@@ -13,7 +13,7 @@ class HiddenProducts(object):
 
 
 class HiddenProfiles(object):
-    implements(plone_interfaces.INonInstallableProfiles)
+    implements(plone_interfaces.INonInstallable)
 
     def getNonInstallableProfiles(self):
         return [u'collective.quickupload:default',
