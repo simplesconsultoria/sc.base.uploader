@@ -8,13 +8,15 @@ class HiddenProducts(object):
     implements(qi_interfaces.INonInstallable)
 
     def getNonInstallableProducts(self):
-        return [u'collective.quickupload',
-                u'collective.zipfiletransport']
+        return []
+#        return [u'collective.quickupload',
+#                u'collective.zipfiletransport']
 
 
 class HiddenProfiles(object):
     implements(plone_interfaces.INonInstallable)
 
     def getNonInstallableProfiles(self):
-        return [u'collective.quickupload:default',
-                u'collective.zipfiletransport:default']
+        return [u'sc.base.uploader:uninstall']
+#        return [u'collective.quickupload:default',
+#                u'collective.zipfiletransport:default']
