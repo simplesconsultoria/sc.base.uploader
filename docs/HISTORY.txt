@@ -4,7 +4,7 @@ Changelog
 1.0b3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+* Fix Manifest.in file [ericof]
 
 
 1.0b2 (2013-03-05)
