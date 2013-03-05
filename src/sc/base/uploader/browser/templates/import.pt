@@ -27,7 +27,7 @@
                 
                 jQuery('#zipimport-form').prepOverlay(
                     { subtype: 'ajax', 
-                      filter: '#content>*:not(div.configlet),dl.portalMessage.error,dl.portalMessage.info', 
+                      filter: '#portal-column-content > * ', 
                       formselector: '#zc\\.page\\.browser_form',
                       noform: 'close' | 'reload' | 'redirect'
                     });
