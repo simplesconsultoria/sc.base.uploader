@@ -1,3 +1,4 @@
+include *.txt
 recursive-include sc *
 recursive-include docs *
 recursive-include mo *
