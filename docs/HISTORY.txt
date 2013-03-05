@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0b3 (unreleased)
+1.0b3 (2013-03-05)
 ------------------
 
 * Fix Manifest.in file [ericof]
